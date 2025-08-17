@@ -1,0 +1,50 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"
+  
+  config.vm.define "ibenmainS" do |control|
+    control.vm.hostname = "ibenmainS"
+    control.vm.network "private_network", ip: "192.168.56.110"
+    
+    control.vm.provider "virtualbox" do |vb|
+      vb.name = "ibenmainS"
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+
+    control.vm.provision "shell", inline: <<-SHELL
+      curl -sfL https://get.k3s.io | \
+        INSTALL_K3S_EXEC="--tls-san 192.168.56.110 --node-ip 192.168.56.110 --write-kubeconfig-mode 644" \
+        sh -
+
+      until [ -f /var/lib/rancher/k3s/server/node-token ]; do sleep 5; done
+      cat /var/lib/rancher/k3s/server/node-token > /vagrant/token
+      
+      mkdir -p /home/vagrant/.kube
+      sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config
+      sudo chown -R vagrant:vagrant /home/vagrant/.kube
+    SHELL
+  end
+
+  config.vm.define "ibenmainSW" do |worker|
+    worker.vm.hostname = "ibenmainSW"
+    worker.vm.network "private_network", ip: "192.168.56.111"
+    
+    worker.vm.provider "virtualbox" do |vb|
+      vb.name = "ibenmainSW"
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+    
+    worker.vm.provision "shell", inline: <<-SHELL
+      until [ -f /vagrant/token ]; do sleep 10; done
+
+      apt-get update -y
+      apt-get install -y curl
+       
+      curl -sfL https://get.k3s.io | \
+        K3S_URL=https://192.168.56.110:6443 \
+        K3S_TOKEN=$(cat /vagrant/token) \
+        sh -
+    SHELL
+  end
+end
