@@ -6,7 +6,7 @@ sudo apt-get upgrade -y
 
 # Install required packages
 # curl for install the k3s remote
-#  openssh-server for connecte with vm
+#  openssh-server for connecte with vmgit remote add origin git@github.com:Ibenmain/inception-of-things.git
 sudo apt-get install -y curl openssh-server
 
 # Generate a new RSA SSH key pair with no passphrase

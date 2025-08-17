@@ -1,12 +1,10 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/jammy64"
-
-  config.vm.synced_folder ".", "/vagrant_data", type: "rsync"
-
+  
   config.vm.define "ibenmainS" do |control|
     control.vm.hostname = "ibenmainS"
     control.vm.network "private_network", ip: "192.168.56.110"
-
+    
     control.vm.provider "virtualbox" do |vb|
       vb.name = "ibenmainS"
       vb.memory = 1024
@@ -20,15 +18,10 @@ Vagrant.configure("2") do |config|
 
       until [ -f /var/lib/rancher/k3s/server/node-token ]; do sleep 5; done
       cat /var/lib/rancher/k3s/server/node-token > /vagrant/token
-
+      
       mkdir -p /home/vagrant/.kube
       sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config
       sudo chown -R vagrant:vagrant /home/vagrant/.kube
-      until kubectl get pods -n kube-system | grep traefik | grep Running; do sleep 5; done
-
-      kubectl apply -f /vagrant_data/app1.yaml
-      kubectl apply -f /vagrant_data/ingress.yaml
-
     SHELL
   end
 end

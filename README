@@ -1,1 +1,81 @@
-# Inception Of Things
+# Inception-of-Things (IoT) Project 🚀
+
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white)
+![Vagrant](https://img.shields.io/badge/Vagrant-1868F2?logo=vagrant&logoColor=white)
+![ArgoCD](https://img.shields.io/badge/Argo_CD-EF7B4D?logo=argo&logoColor=white)
+
+A Kubernetes learning project implementing K3s, K3d, Vagrant, and Argo CD for system administration.
+
+## 📂 Repository Structure
+.
+├── p1/ # Part 1: K3s with Vagrant
+│ ├── Vagrantfile # VM configuration
+│ ├── scripts/ # Installation scripts
+│ └── confs/ # Configuration files
+├── p2/ # Part 2: K3s applications
+│ ├── Vagrantfile
+│ ├── scripts/
+│ └── confs/
+├── p3/ # Part 3: K3d + Argo CD
+│ ├── scripts/
+│ └── confs/
+└── bonus/ # Bonus: GitLab integration
+├── Vagrantfile
+├── scripts/
+└── confs/
+
+
+## 🛠️ Part 1: K3s with Vagrant
+
+### Overview
+Set up a 2-node K3s cluster (1 controller + 1 worker) using Vagrant.
+
+### Requirements
+- Vagrant 2.2+
+- VirtualBox 6.0+
+- 2GB RAM available
+
+### Configuration
+| Node        | Hostname    | IP Address     | Role     |
+|-------------|------------|----------------|----------|
+| Controller  | `<login>S`  | 192.168.56.110 | control-plane |
+| Worker      | `<login>SW` | 192.168.56.111 | agent    |
+
+### 🚀 Quick Start
+```bash
+cd p1
+vagrant up
+vagrant ssh <login>S  # Access controller
+kubectl get nodes    # Verify cluster
+
+# On controller node:
+kubectl get nodes -o wide
+# Should show both nodes as 'Ready'
+
+Application Architecture
+
+graph LR
+    Client -->|app1.com| App1
+    Client -->|app2.com| App2
+    Client -->|*| App3
+
+cd p2
+vagrant up
+vagrant ssh
+kubectl apply -f confs/
+
+curl -H "Host: app1.com" 192.168.56.110
+curl -H "Host: app2.com" 192.168.56.110
+curl 192.168.56.110  # Defaults to app3
+
+sequenceDiagram
+    GitHub->>ArgoCD: Configuration changes
+    ArgoCD->>K3d: Sync deployment
+    K3d->>DockerHub: Pull container image
+
+# Install prerequisites:
+cd p3
+./scripts/setup.sh
+# Access Argo CD UI:
+
+kubectl port-forward svc/argocd-server -n argocd 8080:443
