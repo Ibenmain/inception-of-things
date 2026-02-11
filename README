@@ -16,13 +16,7 @@ A Kubernetes learning project implementing K3s, K3d, Vagrant, and Argo CD for sy
 │ ├── Vagrantfile
 │ ├── scripts/
 │ └── confs/
-├── p3/ # Part 3: K3d + Argo CD
-│ ├── scripts/
-│ └── confs/
-└── bonus/ # Bonus: GitLab integration
-├── Vagrantfile
-├── scripts/
-└── confs/
+
 
 
 ## 🛠️ Part 1: K3s with Vagrant
@@ -72,10 +66,3 @@ sequenceDiagram
     GitHub->>ArgoCD: Configuration changes
     ArgoCD->>K3d: Sync deployment
     K3d->>DockerHub: Pull container image
-
-# Install prerequisites:
-cd p3
-./scripts/setup.sh
-# Access Argo CD UI:
-
-kubectl port-forward svc/argocd-server -n argocd 8080:443

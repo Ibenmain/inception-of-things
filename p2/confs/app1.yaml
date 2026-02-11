@@ -13,18 +13,18 @@ spec:
         app: app1
     spec:
       containers:
-      - name: app1
-        image: nginx:alpine
+      - name: hello-kubernetes
+        image: paulbouwer/hello-kubernetes:1.10
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app1
+  name: app1-service
 spec:
-  selector:
-    app: app1
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 8080
+  selector:
+    app: app1
