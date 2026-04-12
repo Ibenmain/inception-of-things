@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/Ibenmain/inception-of-things/tree/main/p3/app.git'
-    path: 'app'
+    repoURL: 'https://github.com/Ibenmain/inception-of-things.git'
+    path: 'p3/manifests'
     targetRevision: HEAD
   destination:
     server: 'https://kubernetes.default.svc'
