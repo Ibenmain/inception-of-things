@@ -1,4 +1,5 @@
-# use this script to set up Argo CD on a local K3d cluster for development and testing manually.
+#!/bin/bash
+set -e
 
 # Create a K3d cluster with one server node (default)
 k3d cluster create iot-cluster
@@ -16,6 +17,8 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 # if you get error: Unable to connect to the server: dial tcp: lookup raw.githubusercontent.com on 127.0.0.53:53: no such host 
 # change /etc/resolv.conf to use the nameserver 8.8.8.8
+
+sed -i 's/nameserver 127.0.0.1/nameserver 8.8.8.8/' /etc/resolv.conf
 
 # Wait for all Argo CD pods to be ready (this may take a minute)
 kubectl wait --for=condition=ready pods --all -n argocd --timeout=300s

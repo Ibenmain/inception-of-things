@@ -8,4 +8,5 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.provision "shell", path: "scripts/install.sh"
+  config.vm.provision "shell", path: "scripts/set-up-argocd.sh"
 end

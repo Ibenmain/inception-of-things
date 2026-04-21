@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e  # Exit on any error
+set -e
 
 echo "=== Installing Docker ==="
 sudo apt update
